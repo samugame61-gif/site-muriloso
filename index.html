@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz do Muriloso</title>
+    <title>Quiz do Renato Moicano</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -68,20 +68,20 @@
 </head>
 <body class="text-gray-800">
     <div id="question1" class="bg-white p-8 rounded-xl shadow-md w-full max-w-md transform transition-all duration-300 hover:shadow-lg">
-        <h2 class="text-2xl font-semibold mb-4 text-blue-600">Qual o nome do Muriloso?</h2>
+        <h2 class="text-2xl font-semibold mb-4 text-blue-600">Qual é o nome do Senil Moicanso?</h2>
         <input type="text" id="answer1" placeholder="Digite sua resposta" class="w-full p-3 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
         <button onclick="checkAnswer1()" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">Enviar</button>
     </div>
 
     <div id="question2" class="bg-white p-8 rounded-xl shadow-md w-full max-w-md transform transition-all duration-300 hover:shadow-lg" style="display: none;">
-        <h2 class="text-2xl font-semibold mb-4 text-blue-600">Qual a data de nascimento do Muriloso?</h2>
+        <h2 class="text-2xl font-semibold mb-4 text-blue-600">Qual a data de nascimento do Renato Moicano?</h2>
         <input type="date" id="answer2" class="w-full p-3 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
         <button onclick="goToGame()" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">Enviar</button>
     </div>
 
     <div id="game" class="bg-white p-8 rounded-xl shadow-md w-full max-w-md transform transition-all duration-300 hover:shadow-lg" style="display: none;">
         <h2 class="text-2xl font-semibold mb-4 text-blue-600">Jogo da Velha</h2>
-        <p class="mb-4">Você é X, clique para jogar!</p>
+        <p class="mb-4">Você é X, ganhe o jogo da velha para passar para a próxima fase!</p>
         <div class="tic-tac-toe" id="board">
             <div class="cell" onclick="playerMove(0)"></div>
             <div class="cell" onclick="playerMove(1)"></div>
@@ -106,7 +106,7 @@
 
         function checkAnswer1() {
             const answer = document.getElementById('answer1').value.trim().toLowerCase();
-            if (answer === 'murilo') {
+            if (answer === 'renato') {
                 document.getElementById('question1').style.display = 'none';
                 document.getElementById('question2').style.display = 'block';
             } else {
@@ -115,8 +115,24 @@
         }
 
         function goToGame() {
-            document.getElementById('question2').style.display = 'none';
-            document.getElementById('game').style.display = 'block';
+            const answer = document.getElementById('answer2').value;
+            if (answer === '1989-05-21') {
+                document.getElementById('question2').style.display = 'none';
+                document.getElementById('game').style.display = 'block';
+            } else {
+                alert('Data de nascimento errada! Tente novamente.');
+            }
+        }
+
+        function checkWin(player) {
+            const winConditions = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Linhas
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Colunas
+                [0, 4, 8], [2, 4, 6] // Diagonais
+            ];
+            return winConditions.some(condition =>
+                condition.every(index => board[index] === player)
+            );
         }
 
         function playerMove(index) {
@@ -125,7 +141,7 @@
                 document.getElementsByClassName('cell')[index].textContent = 'X';
                 playerMoves++;
                 
-                if (playerMoves === 3) {
+                if (playerMoves === 2) {
                     triggerScare();
                     return;
                 }
@@ -136,8 +152,22 @@
                     const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
                     board[randomIndex] = 'O';
                     document.getElementsByClassName('cell')[randomIndex].textContent = 'O';
+                    if (checkWin('O')) {
+                        alert('O computador venceu! Tente novamente.');
+                        resetGame();
+                    }
                 }
             }
+        }
+
+        function resetGame() {
+            board.fill('');
+            playerMoves = 0;
+            document.querySelectorAll('.cell').forEach(cell => cell.textContent = '');
+            document.getElementById('game').style.display = 'block';
+            document.getElementById('scare').style.display = 'none';
+            document.getElementById('scare-video').style.display = 'none';
+            document.getElementById('monkey-img').style.display = 'none';
         }
 
         function triggerScare() {
