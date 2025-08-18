@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz do Renato Moicano</title>
+    <title>Quiz do Muriloso</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -25,13 +25,16 @@
         }
         #monkey-img {
             display: none;
-            width: 80%;
-            max-width: 800px;
-            border: 4px solid #3b82f6;
-            border-radius: 12px;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            position: fixed;
+            top: 0;
+            left: 0;
+            border: none;
+            border-radius: 0;
             transition: transform 0.3s ease-in-out;
             z-index: 100;
-            position: relative;
         }
         #monkey-img.visible {
             transform: scale(1.05);
@@ -67,18 +70,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body class="text-gray-800">
+    <!-- Pergunta 1 -->
     <div id="question1" class="bg-white p-8 rounded-xl shadow-md w-full max-w-md transform transition-all duration-300 hover:shadow-lg">
-        <h2 class="text-2xl font-semibold mb-4 text-blue-600">Qual é o nome do Senil Moicanso?</h2>
+        <h2 class="text-2xl font-semibold mb-4 text-blue-600">Qual é o nome do Muriloso?</h2>
+        
         <input type="text" id="answer1" placeholder="Digite sua resposta" class="w-full p-3 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <button onclick="checkAnswer1()" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">Enviar</button>
+        <button onclick="checkAnswer1()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 w-full">Enviar</button>
     </div>
 
+    <!-- Pergunta 2 (Múltipla escolha) -->
     <div id="question2" class="bg-white p-8 rounded-xl shadow-md w-full max-w-md transform transition-all duration-300 hover:shadow-lg" style="display: none;">
-        <h2 class="text-2xl font-semibold mb-4 text-blue-600">Qual a data de nascimento do Renato Moicano?</h2>
-        <input type="date" id="answer2" class="w-full p-3 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <button onclick="goToGame()" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">Enviar</button>
+        <h2 class="text-2xl font-semibold mb-4 text-blue-600">Quantos seguidores na Twitch o Muriloso tem?</h2>
+        <div class="space-y-3" id="options-group">
+            <label class="flex items-center gap-3 p-3 rounded-lg border border-blue-200 hover:bg-blue-50 cursor-pointer">
+                <input type="radio" name="followers" value="a" class="accent-blue-600">
+                <span>100k</span>
+            </label>
+            <label class="flex items-center gap-3 p-3 rounded-lg border border-blue-200 hover:bg-blue-50 cursor-pointer">
+                <input type="radio" name="followers" value="b" class="accent-blue-600">
+                <span>250k</span>
+            </label>
+            <label class="flex items-center gap-3 p-3 rounded-lg border border-blue-200 hover:bg-blue-50 cursor-pointer">
+                <input type="radio" name="followers" value="c" class="accent-blue-600">
+                <span>300k</span>
+            </label>
+            <label class="flex items-center gap-3 p-3 rounded-lg border border-blue-200 hover:bg-blue-50 cursor-pointer">
+                <input type="radio" name="followers" value="d" class="accent-blue-600">
+                <span>500k</span>
+            </label>
+        </div>
+        <button onclick="goToGame()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 w-full">Enviar</button>
     </div>
 
+    <!-- Jogo -->
     <div id="game" class="bg-white p-8 rounded-xl shadow-md w-full max-w-md transform transition-all duration-300 hover:shadow-lg" style="display: none;">
         <h2 class="text-2xl font-semibold mb-4 text-blue-600">Jogo da Velha</h2>
         <p class="mb-4">Você é X, ganhe o jogo da velha para passar para a próxima fase!</p>
@@ -95,32 +119,40 @@
         </div>
     </div>
 
+    <!-- Tela de susto -->
     <div id="scare" class="flex justify-center items-center min-h-screen" style="display: none;">
         <video id="scare-video" src="360p-watermark.mp4" style="display: none;"></video>
-        <img id="monkey-img" src="575870800e216345750a08ecschimpanse_zoo_leipzig1.jpg" alt="Macaco">
+        <img id="monkey-img" src="AA1xB9CK.jpg" alt="Macaco">
     </div>
 
     <script>
+        // Configuração da opção correta da pergunta 2 (ajuste se quiser outra correta)
+        const CORRECT_OPTION = 'b'; // 'a' | 'b' | 'c' | 'd'
+
         let playerMoves = 0;
         const board = Array(9).fill('');
 
         function checkAnswer1() {
             const answer = document.getElementById('answer1').value.trim().toLowerCase();
-            if (answer === 'renato') {
+            if (answer === 'murilo') {
                 document.getElementById('question1').style.display = 'none';
                 document.getElementById('question2').style.display = 'block';
             } else {
-                alert('Resposta errada! Tente novamente.');
+                alert('Resposta errada! Dica: o apelido é "muriloso" e o nome é simples.');
             }
         }
 
         function goToGame() {
-            const answer = document.getElementById('answer2').value;
-            if (answer === '1989-05-21') {
+            const selected = document.querySelector('input[name="followers"]:checked');
+            if (!selected) {
+                alert('Selecione uma opção para continuar.');
+                return;
+            }
+            if (selected.value === CORRECT_OPTION) {
                 document.getElementById('question2').style.display = 'none';
                 document.getElementById('game').style.display = 'block';
             } else {
-                alert('Data de nascimento errada! Tente novamente.');
+                alert('Resposta errada! Tente novamente.');
             }
         }
 
